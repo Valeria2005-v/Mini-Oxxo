@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import Empleados from "./pages/Empleados";
+import Productos from "./pages/Productos";
+import Cobro from "./pages/Cobro";
 
-function App() {
+export default function App() {
+  const [pagina, setPagina] = useState("inicio");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      {pagina === "inicio" && (
+        <div style={{ textAlign: "center" }}>
+          <h1>Sistema OXXO</h1>
+
+          <button onClick={() => setPagina("empleados")}>
+            Empleados
+          </button>
+
+          <button onClick={() => setPagina("productos")}>
+            Productos
+          </button>
+
+          <button onClick={() => setPagina("cobro")}>
+            Cobro
+          </button>
+        </div>
+      )}
+
+      {pagina === "empleados" && (
+        <Empleados regresar={() => setPagina("inicio")} />
+      )}
+
+      {pagina === "productos" && (
+        <Productos regresar={() => setPagina("inicio")} />
+      )}
+
+      {pagina === "cobro" && (
+        <Cobro regresar={() => setPagina("inicio")} />
+      )}
     </div>
   );
 }
-
-export default App;
