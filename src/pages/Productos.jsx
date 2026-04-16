@@ -1,13 +1,13 @@
 import { useState } from "react";
 
-const CATEGORIAS = ["Todas", "Bebidas", "Botanas", "Panadería", "Lácteos", "Tabaco", "Café", "Carnes", "Otro"];
+const CATEGORIAS = ["Todas", "Bebidas", "Botanas", "Panadería", "Lácteos", "Cigarros", "Café", "Charcutería", "Dulces", "Otros"];
 
 export default function Productos({ catalogo, setCatalogo }) {
   const [categoriaActiva, setCategoriaActiva] = useState("Todas");
   const [busqueda, setBusqueda] = useState("");
   const [modo, setModo] = useState(null);
   const [productoEditando, setProductoEditando] = useState(null);
-  const [form, setForm] = useState({ id: "", nombre: "", precio: "", categoria: "Bebidas" });
+  const [form, setForm] = useState({ id: "", nombre: "", precio: "", categoria: "Bebidas", puntos: "" });
 
   const productosFiltrados = catalogo.filter((p) => {
     const matchCat = categoriaActiva === "Todas" || p.categoria === categoriaActiva;
@@ -17,20 +17,24 @@ export default function Productos({ catalogo, setCatalogo }) {
 
   function abrirNuevo() {
     const siguienteId = String(catalogo.length + 1).padStart(3, "0");
-    setForm({ id: siguienteId, nombre: "", precio: "", categoria: "Bebidas" });
+    setForm({ id: siguienteId, nombre: "", precio: "", categoria: "Bebidas", puntos: "" });
     setProductoEditando(null);
     setModo("nuevo");
   }
 
   function abrirEditar(p) {
-    setForm({ ...p, precio: String(p.precio) });
+    setForm({ ...p, precio: String(p.precio), puntos: String(p.puntos || "") });
     setProductoEditando(p.id);
     setModo("editar");
   }
 
   function guardar() {
     if (!form.nombre || !form.precio) return;
-    const nuevo = { ...form, precio: parseFloat(form.precio) };
+    const nuevo = {
+      ...form,
+      precio: parseFloat(form.precio),
+      puntos: form.puntos ? parseInt(form.puntos) : 0,
+    };
     if (modo === "nuevo") {
       if (catalogo.find((p) => p.id === form.id)) {
         alert("Ya existe un producto con ese ID.");
@@ -84,14 +88,28 @@ export default function Productos({ catalogo, setCatalogo }) {
             <input value={form.nombre} onChange={(e) => setForm({ ...form, nombre: e.target.value })}
               placeholder="Nombre del producto" />
           </div>
-          <div>
-            <label style={{ display: "block", fontWeight: 700, marginBottom: 6, fontSize: "0.9rem" }}>Categoría</label>
-            <select value={form.categoria} onChange={(e) => setForm({ ...form, categoria: e.target.value })}
-              style={{ width: "100%", border: "1px solid rgba(0,0,0,0.15)", borderRadius: 18, padding: "14px 16px" }}>
-              {CATEGORIAS.filter((c) => c !== "Todas").map((c) => (
-                <option key={c}>{c}</option>
-              ))}
-            </select>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div>
+              <label style={{ display: "block", fontWeight: 700, marginBottom: 6, fontSize: "0.9rem" }}>Categoría</label>
+              <select value={form.categoria} onChange={(e) => setForm({ ...form, categoria: e.target.value })}
+                style={{ width: "100%", border: "1px solid rgba(0,0,0,0.15)", borderRadius: 18, padding: "14px 16px" }}>
+                {CATEGORIAS.filter((c) => c !== "Todas").map((c) => (
+                  <option key={c}>{c}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label style={{ display: "block", fontWeight: 700, marginBottom: 6, fontSize: "0.9rem" }}>
+                Puntos
+              </label>
+              <input
+                type="number"
+                min="0"
+                value={form.puntos}
+                onChange={(e) => setForm({ ...form, puntos: e.target.value })}
+                placeholder="0"
+              />
+            </div>
           </div>
           <div style={{ display: "flex", gap: 10 }}>
             <button onClick={guardar} style={{
@@ -140,7 +158,15 @@ export default function Productos({ catalogo, setCatalogo }) {
                   {p.categoria}
                 </span>
               </div>
-              <h3 style={{ marginTop: 10 }}>{p.nombre}</h3>
+              <h3 style={{ marginTop: 10, marginBottom: 4 }}>{p.nombre}</h3>
+              {p.puntos > 0 && (
+                <span style={{
+                  background: "#fffbeb", color: "#b45309", borderRadius: 999,
+                  padding: "3px 10px", fontSize: "0.78rem", fontWeight: 700
+                }}>
+                  {p.puntos} pts
+                </span>
+              )}
             </div>
             <div>
               <div className="product-meta">
