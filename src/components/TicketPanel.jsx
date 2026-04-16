@@ -75,6 +75,9 @@ export default function TicketPanel({ ticket, setTicket, onLimpiar, mostrarPago 
   const iva = subtotal * 0.16;
   const total = subtotal + iva;
 
+  // Debug
+  console.log("Ticket actual:", ticket);
+
   function cambiarQty(id, delta) {
     setTicket((prev) =>
       prev

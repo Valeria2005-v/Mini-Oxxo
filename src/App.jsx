@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import Login from "./pages/Login";
 import Empleados from "./pages/Empleados";
 import Productos from "./pages/Productos";
 import Cobro from "./pages/Cobro";
 import Recargas from "./pages/Recargas";
 import Cafes from "./pages/Cafes";
+import { useAuth } from "./context/AuthContext";
 import { catalogoInicial } from "./data/productos";
 
 const tabs = [
@@ -17,6 +19,7 @@ const tabs = [
 ];
 
 export default function App() {
+  const { empleadoLoggeado, logout } = useAuth();
   const [pagina, setPagina] = useState("cobro");
   const [hora, setHora] = useState(new Date());
   const [catalogo, setCatalogo] = useState(catalogoInicial);
@@ -47,6 +50,10 @@ export default function App() {
     setTicket([]);
   }
 
+  if (!empleadoLoggeado) {
+    return <Login />;
+  }
+
   return (
     <div className="app-container">
       <header className="top-bar">
@@ -55,7 +62,12 @@ export default function App() {
           <div className="brand-copy">PUNTO DE VENTA</div>
         </div>
         <div className="top-right">
-          <div className="cashier-label">Aqui tenemos que poner el nombre del empleado okayyyyy????</div>
+          <div className="cashier-info">
+            <div className="cashier-label">{empleadoLoggeado.nombre} • {empleadoLoggeado.puesto}</div>
+            <button className="logout-btn" onClick={logout} title="Cerrar sesión">
+              🚪 Salir
+            </button>
+          </div>
           <div className="time-badge">{horaFormateada}</div>
         </div>
       </header>
