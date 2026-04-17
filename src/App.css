@@ -49,7 +49,8 @@ select {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   opacity: 0.9;
-  color: #111;
+  color: #f7f7f7;
+  font-weight: bold;
 }
 
 .top-right {
@@ -59,10 +60,32 @@ select {
   flex-wrap: wrap;
 }
 
+.cashier-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .cashier-label {
   font-size: 0.95rem;
   opacity: 0.95;
 }
+
+.logout-btn {
+  background: #f5f5f5;
+  color: #111;
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-weight: 700;
+}
+
+.logout-btn:hover {
+  background: #ffb300;
+}
+
+
+
+
 
 .time-badge {
   background: #ffb300;

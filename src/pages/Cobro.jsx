@@ -38,7 +38,8 @@ export default function Cobro({ catalogo, ticket, setTicket, onAgregar, onLimpia
       return;
     }
 
-    onAgregar({ ...producto, tipo: "producto" });
+    console.log("Agregando producto:", producto);
+    onAgregar({ ...producto, qty: 1 });
     setIdInput("");
     inputRef.current?.focus();
   }
