@@ -64,11 +64,11 @@ export default function App() {
         <div className="top-right">
           <div className="cashier-info">
             <div className="cashier-label">{empleadoLoggeado.nombre} • {empleadoLoggeado.puesto}</div>
+            <div className="time-badge">{horaFormateada}</div>
             <button className="logout-btn" onClick={logout} title="Cerrar sesión">
-              🚪 Salir
+              Cerrar sesión
             </button>
           </div>
-          <div className="time-badge">{horaFormateada}</div>
         </div>
       </header>
 
