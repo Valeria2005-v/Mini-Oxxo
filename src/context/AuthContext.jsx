@@ -30,8 +30,9 @@ export function AuthProvider({ children, empleados }) {
   }
 
   function logout() {
-    setEmpleadoLoggeado(null);
+    localStorage.removeItem("reporteTurno");
     localStorage.removeItem("empleadoLoggeado");
+    setEmpleadoLoggeado(null);
   }
 
   return (

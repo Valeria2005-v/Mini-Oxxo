@@ -69,6 +69,7 @@ select {
 .cashier-label {
   font-size: 0.95rem;
   opacity: 0.95;
+  font-weight: 700;
 }
 
 .logout-btn {

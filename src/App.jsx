@@ -6,6 +6,7 @@ import Productos from "./pages/Productos";
 import Cobro from "./pages/Cobro";
 import Recargas from "./pages/Recargas";
 import Cafes from "./pages/Cafes";
+import Reportes from "./pages/Reportes";
 import { useAuth } from "./context/AuthContext";
 import { catalogoInicial } from "./data/productos";
 
@@ -71,7 +72,7 @@ export default function App({ empleados, setEmpleados }) {
         <div className="top-right">
           <div className="cashier-info">
             <div className="cashier-label">
-              {empleadoLoggeado.nombre} • {empleadoLoggeado.puesto}
+              {empleadoLoggeado.nombre}
             </div>
             <div className="time-badge">{horaFormateada}</div>
             <button className="logout-btn" onClick={logout} title="Cerrar sesión">
@@ -125,14 +126,7 @@ export default function App({ empleados, setEmpleados }) {
         {pagina === "empleados" && (
           <Empleados empleados={empleados} setEmpleados={setEmpleados} />
         )}
-        {pagina === "reportes" && (
-          <div className="card report-card">
-            <div>
-              <h2>Reportes</h2>
-              <p>Apenas la estamos haciendo profe.</p>
-            </div>
-          </div>
-        )}
+        {pagina === "reportes" && <Reportes />}
       </main>
     </div>
   );
