@@ -1,13 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
-const EMPLEADOS_DEMO = [
-  { id: "E001", nombre: "María García" },
-  { id: "E002", nombre: "Juan Pérez" },
-  { id: "E003", nombre: "Luis Torres" },
-];
-
-export default function Login() {
+export default function Login({ empleados }) {
   const { login } = useAuth();
   const [empleadoId, setEmpleadoId] = useState("");
   const [password, setPassword] = useState("");
@@ -17,26 +11,17 @@ export default function Login() {
   function handleLogin(e) {
     e.preventDefault();
     setError("");
-
-    if (!empleadoId) {
-      setError("Selecciona un empleado");
-      return;
-    }
-
-    if (!password) {
-      setError("Ingresa la contraseña");
-      return;
-    }
-
+    if (!empleadoId) { setError("Selecciona un empleado"); return; }
+    if (!password) { setError("Ingresa la contraseña"); return; }
     setCargando(true);
     setTimeout(() => {
       const resultado = login(empleadoId, password);
-      if (!resultado.exito) {
-        setError(resultado.error);
-      }
+      if (!resultado.exito) setError(resultado.error);
       setCargando(false);
     }, 300);
   }
+
+  const empleadosActivos = empleados.filter((e) => e.activo);
 
   return (
     <>
@@ -46,79 +31,108 @@ export default function Login() {
           justify-content: center;
           align-items: center;
           min-height: 100vh;
-          background: linear-gradient(135deg, #ff0000 0%, #ff0000 100%);
+          background: linear-gradient(135deg, #d4141b 0%, #ff2a2a 100%);
           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
           position: relative;
           overflow: hidden;
         }
-
-        .login-container::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background-image:
-            radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
-            radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
-        }
-
         .login-card {
-          background: rgba(255,255,255,0.95);
+          background: rgba(255,255,255,0.97);
           border-radius: 20px;
           padding: 50px;
           width: 100%;
           max-width: 420px;
           box-shadow: 0 20px 60px rgba(0,0,0,0.3);
           z-index: 1;
+          position: relative;
         }
-
         .login-header {
           text-align: center;
           margin-bottom: 40px;
         }
-
         .login-logo {
           width: 80px;
           height: 80px;
           margin: 0 auto 20px;
-          background: linear-gradient(135deg, #ffff00, #ffd829);
+          background: linear-gradient(135deg, #ffb300, #ffd829);
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           font-size: 2.5em;
+          box-shadow: 0 8px 24px rgba(212,20,27,0.3);
         }
-
+        .login-header h1 {
+          font-size: 2.5rem;
+          margin: 0 0 8px;
+          color: #d4141b;
+          font-weight: 800;
+          letter-spacing: 2px;
+        }
+        .login-header h2 {
+          font-size: 1rem;
+          margin: 0;
+          color: #666;
+          font-weight: 500;
+        }
         .login-form {
           display: flex;
           flex-direction: column;
           gap: 20px;
         }
-
         .form-group {
           display: flex;
           flex-direction: column;
+          gap: 8px;
         }
-
+        .form-group label {
+          font-weight: 600;
+          color: #333;
+          font-size: 0.95rem;
+        }
         .form-group input,
         .form-group select {
-          padding: 12px;
-          border-radius: 10px;
-          border: 1px solid #ccc;
+          padding: 14px 16px;
+          border: 2px solid rgba(0,0,0,0.12);
+          border-radius: 12px;
+          font-size: 1rem;
+          background: white;
+          outline: none;
+          transition: border-color 0.2s;
         }
-
+        .form-group input:focus,
+        .form-group select:focus {
+          border-color: #d4141b;
+        }
         .error-message {
-          color: red;
-          text-align: center;
-        }
-
-        .login-button {
-          padding: 14px;
-          background: yellow;
-          border: none;
+          background: #fff0f0;
+          color: #c33;
+          padding: 12px 16px;
           border-radius: 10px;
-          font-weight: bold;
+          font-size: 0.9rem;
+          text-align: center;
+          border-left: 4px solid #ff4444;
+        }
+        .login-button {
+          padding: 16px;
+          background: #ffb300;
+          color: #111;
+          border: none;
+          border-radius: 12px;
+          font-size: 1.1rem;
+          font-weight: 700;
           cursor: pointer;
+          transition: all 0.2s;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+        .login-button:hover:not(:disabled) {
+          background: #ffd829;
+          transform: translateY(-2px);
+        }
+        .login-button:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
         }
       `}</style>
 
@@ -126,41 +140,36 @@ export default function Login() {
         <div className="login-card">
           <div className="login-header">
             <div className="login-logo">🏪</div>
-            <h1>Mini Oxxo</h1>
+            <h1>OXXO</h1>
             <h2>Portal de Empleados</h2>
           </div>
 
           <form onSubmit={handleLogin} className="login-form">
             <div className="form-group">
-              <label>Empleado:</label>
+              <label>Empleado</label>
               <select
                 value={empleadoId}
-                onChange={(e) => {
-                  setEmpleadoId(e.target.value);
-                  setError("");
-                }}
+                onChange={(e) => { setEmpleadoId(e.target.value); setError(""); }}
                 disabled={cargando}
               >
                 <option value="">Selecciona un empleado</option>
-                {EMPLEADOS_DEMO.map((emp) => (
+                {empleadosActivos.map((emp) => (
                   <option key={emp.id} value={emp.id}>
-                    {emp.nombre} ({emp.id})
+                    {emp.nombre} — {emp.puesto} ({emp.turno})
                   </option>
                 ))}
               </select>
             </div>
 
             <div className="form-group">
-              <label>Contraseña:</label>
+              <label>Contraseña</label>
               <input
                 type="password"
                 value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setError("");
-                }}
+                onChange={(e) => { setPassword(e.target.value); setError(""); }}
                 placeholder="Ingresa tu contraseña"
                 disabled={cargando}
+                autoComplete="current-password"
               />
             </div>
 

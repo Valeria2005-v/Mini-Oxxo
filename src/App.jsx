@@ -18,17 +18,24 @@ const tabs = [
   { id: "reportes", label: "REPORTES" },
 ];
 
-export default function App() {
+export default function App({ empleados, setEmpleados }) {
   const { empleadoLoggeado, logout } = useAuth();
   const [pagina, setPagina] = useState("cobro");
   const [hora, setHora] = useState(new Date());
-  const [catalogo, setCatalogo] = useState(catalogoInicial);
+  const [catalogo, setCatalogo] = useState(() => {
+    const guardado = localStorage.getItem("catalogo");
+    return guardado ? JSON.parse(guardado) : catalogoInicial;
+  });
   const [ticket, setTicket] = useState([]);
 
   useEffect(() => {
     const intervalo = setInterval(() => setHora(new Date()), 1000);
     return () => clearInterval(intervalo);
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("catalogo", JSON.stringify(catalogo));
+  }, [catalogo]);
 
   const horaFormateada = hora.toLocaleTimeString("es-MX", {
     hour: "2-digit",
@@ -51,7 +58,7 @@ export default function App() {
   }
 
   if (!empleadoLoggeado) {
-    return <Login />;
+    return <Login empleados={empleados} />;
   }
 
   return (
@@ -63,7 +70,9 @@ export default function App() {
         </div>
         <div className="top-right">
           <div className="cashier-info">
-            <div className="cashier-label">{empleadoLoggeado.nombre} • {empleadoLoggeado.puesto}</div>
+            <div className="cashier-label">
+              {empleadoLoggeado.nombre} • {empleadoLoggeado.puesto}
+            </div>
             <div className="time-badge">{horaFormateada}</div>
             <button className="logout-btn" onClick={logout} title="Cerrar sesión">
               Cerrar sesión
@@ -113,7 +122,9 @@ export default function App() {
             onLimpiar={limpiarTicket}
           />
         )}
-        {pagina === "empleados" && <Empleados />}
+        {pagina === "empleados" && (
+          <Empleados empleados={empleados} setEmpleados={setEmpleados} />
+        )}
         {pagina === "reportes" && (
           <div className="card report-card">
             <div>

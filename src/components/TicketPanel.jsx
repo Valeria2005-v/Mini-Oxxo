@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+
 function PagoSection({ total, onLimpiar, ticket }) {
   const [recibido, setRecibido] = useState("");
   const [vendido, setVendido] = useState(false);

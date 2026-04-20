@@ -3,18 +3,13 @@ import { useState } from "react";
 const PUESTOS = ["Cajero", "Gerente"];
 const TURNOS = ["Matutino", "Vespertino", "Nocturno"];
 
-const empleadosIniciales = [
-  { id: "E001", nombre: "María García", puesto: "Cajero", turno: "Matutino", activo: true },
-  { id: "E002", nombre: "Juan Pérez", puesto: "Gerente", turno: "Matutino", activo: true },
-  { id: "E003", nombre: "Luis Torres", puesto: "Cajero", turno: "Vespertino", activo: false },
-];
-
-export default function Empleados() {
-  const [empleados, setEmpleados] = useState(empleadosIniciales);
+export default function Empleados({ empleados, setEmpleados }) {
   const [modo, setModo] = useState(null);
   const [empleadoEditando, setEmpleadoEditando] = useState(null);
   const [busqueda, setBusqueda] = useState("");
-  const [form, setForm] = useState({ id: "", nombre: "", puesto: "Cajero", turno: "Matutino", activo: true });
+  const [form, setForm] = useState({
+    id: "", nombre: "", puesto: "Cajero", turno: "Matutino", activo: true, password: ""
+  });
 
   const empleadosFiltrados = empleados.filter((e) =>
     e.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
@@ -23,7 +18,7 @@ export default function Empleados() {
 
   function abrirNuevo() {
     const siguienteId = "E" + String(empleados.length + 1).padStart(3, "0");
-    setForm({ id: siguienteId, nombre: "", puesto: "Cajero", turno: "Matutino", activo: true });
+    setForm({ id: siguienteId, nombre: "", puesto: "Cajero", turno: "Matutino", activo: true, password: "" });
     setEmpleadoEditando(null);
     setModo("nuevo");
   }
@@ -35,7 +30,8 @@ export default function Empleados() {
   }
 
   function guardar() {
-    if (!form.nombre) return;
+    if (!form.nombre) { alert("El nombre es obligatorio."); return; }
+    if (!form.password) { alert("La contraseña es obligatoria."); return; }
     if (modo === "nuevo") {
       setEmpleados((prev) => [...prev, form]);
     } else {
@@ -77,8 +73,7 @@ export default function Empleados() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <div>
               <label style={{ display: "block", fontWeight: 700, marginBottom: 6, fontSize: "0.9rem" }}>ID</label>
-              <input value={form.id} disabled placeholder="E001"
-                style={{ background: "#f0f0f0" }} />
+              <input value={form.id} disabled placeholder="E001" style={{ background: "#f0f0f0" }} />
             </div>
             <div>
               <label style={{ display: "block", fontWeight: 700, marginBottom: 6, fontSize: "0.9rem" }}>Nombre completo</label>
@@ -101,6 +96,17 @@ export default function Empleados() {
                 {TURNOS.map((t) => <option key={t}>{t}</option>)}
               </select>
             </div>
+          </div>
+          <div>
+            <label style={{ display: "block", fontWeight: 700, marginBottom: 6, fontSize: "0.9rem" }}>
+              Contraseña (para login)
+            </label>
+            <input
+              type="password"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              placeholder="Contraseña del empleado"
+            />
           </div>
           <div style={{ display: "flex", gap: 10 }}>
             <button onClick={guardar} style={{
