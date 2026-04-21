@@ -102,7 +102,7 @@ export default function Empleados({ empleados, setEmpleados }) {
               Contraseña (para login)
             </label>
             <input
-              type="password"
+              type="Text"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               placeholder="Contraseña del empleado"
