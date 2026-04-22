@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import trece from "../imagenes/TRECE.jpg";
+import doce from "../imagenes/DOCE.webp";
 
 export default function Login({ empleados }) {
   const { login } = useAuth();
@@ -11,9 +13,14 @@ export default function Login({ empleados }) {
   function handleLogin(e) {
     e.preventDefault();
     setError("");
-    if (!empleadoId) { 
-      setError("Selecciona un empleado"); return; }
-    if (!password) { setError("Ingresa la contraseña"); return; }
+    if (!empleadoId) {
+      setError("Selecciona un empleado");
+      return;
+    }
+    if (!password) {
+      setError("Ingresa la contraseña");
+      return;
+    }
     setCargando(true);
     setTimeout(() => {
       const resultado = login(empleadoId, password);
@@ -32,25 +39,49 @@ export default function Login({ empleados }) {
           justify-content: center;
           align-items: center;
           min-height: 100vh;
-          background: linear-gradient(135deg, #d4141b 0%, #ff2a2a 100%);
           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
           position: relative;
           overflow: hidden;
+
+          background-image:
+            linear-gradient(rgba(255,255,255,0.45), rgba(255,255,255,0.45)),
+            url(${trece});
+
+          background-size: cover, cover;
+          background-position: center, center;
+          background-repeat: no-repeat, no-repeat;
         }
+
+        .login-container::after {
+          content: "";
+          position: absolute;
+          width: 650px;
+          height: 750px;
+          background-image: url(${doce});
+          background-size: contain;
+          background-repeat: no-repeat;
+          right: 1000px;
+          bottom: 0px;
+          z-index: 2;
+        }
+
         .login-card {
-          background: rgba(255,255,255,0.97);
+          background: rgb(255, 255, 255);
           border-radius: 20px;
           padding: 50px;
           width: 100%;
           max-width: 420px;
+          margin-left: 180px;
           box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-          z-index: 1;
+          z-index: 3;
           position: relative;
         }
+
         .login-header {
           text-align: center;
           margin-bottom: 40px;
         }
+
         .login-logo {
           width: 80px;
           height: 80px;
@@ -63,6 +94,7 @@ export default function Login({ empleados }) {
           font-size: 2.5em;
           box-shadow: 0 8px 24px rgba(212,20,27,0.3);
         }
+
         .login-header h1 {
           font-size: 2.5rem;
           margin: 0 0 8px;
@@ -70,27 +102,32 @@ export default function Login({ empleados }) {
           font-weight: 800;
           letter-spacing: 2px;
         }
+
         .login-header h2 {
           font-size: 1rem;
           margin: 0;
           color: #666;
           font-weight: 500;
         }
+
         .login-form {
           display: flex;
           flex-direction: column;
           gap: 20px;
         }
+
         .form-group {
           display: flex;
           flex-direction: column;
           gap: 8px;
         }
+
         .form-group label {
           font-weight: 600;
           color: #333;
           font-size: 0.95rem;
         }
+
         .form-group input,
         .form-group select {
           padding: 14px 16px;
@@ -101,10 +138,12 @@ export default function Login({ empleados }) {
           outline: none;
           transition: border-color 0.2s;
         }
+
         .form-group input:focus,
         .form-group select:focus {
           border-color: #d4141b;
         }
+
         .error-message {
           background: #fff0f0;
           color: #c33;
@@ -114,10 +153,11 @@ export default function Login({ empleados }) {
           text-align: center;
           border-left: 4px solid #ff4444;
         }
+
         .login-button {
           padding: 16px;
-          background: #ffb300;
-          color: #111;
+          background: #ff0000;
+          color: #fffefe;
           border: none;
           border-radius: 12px;
           font-size: 1.1rem;
@@ -127,10 +167,12 @@ export default function Login({ empleados }) {
           text-transform: uppercase;
           letter-spacing: 1px;
         }
+
         .login-button:hover:not(:disabled) {
-          background: #ffd829;
+          background: #ff2929;
           transform: translateY(-2px);
         }
+
         .login-button:disabled {
           opacity: 0.6;
           cursor: not-allowed;
@@ -150,7 +192,10 @@ export default function Login({ empleados }) {
               <label>Empleado</label>
               <select
                 value={empleadoId}
-                onChange={(e) => { setEmpleadoId(e.target.value); setError(""); }}
+                onChange={(e) => {
+                  setEmpleadoId(e.target.value);
+                  setError("");
+                }}
                 disabled={cargando}
               >
                 <option value="">Selecciona un empleado</option>
@@ -167,7 +212,10 @@ export default function Login({ empleados }) {
               <input
                 type="password"
                 value={password}
-                onChange={(e) => { setPassword(e.target.value); setError(""); }}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError("");
+                }}
                 placeholder="Ingresa tu contraseña"
                 disabled={cargando}
                 autoComplete="current-password"
