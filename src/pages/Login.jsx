@@ -11,7 +11,8 @@ export default function Login({ empleados }) {
   function handleLogin(e) {
     e.preventDefault();
     setError("");
-    if (!empleadoId) { setError("Selecciona un empleado"); return; }
+    if (!empleadoId) { 
+      setError("Selecciona un empleado"); return; }
     if (!password) { setError("Ingresa la contraseña"); return; }
     setCargando(true);
     setTimeout(() => {
